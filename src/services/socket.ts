@@ -1,6 +1,6 @@
 import { io, Socket } from 'socket.io-client';
 
-const URL = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:3000';
+const URL = import.meta.env.VITE_API_URL?.replace('/api', '') || 'https://ace-connect.onrender.com';
 
 class SocketService {
     public socket: Socket | null = null;

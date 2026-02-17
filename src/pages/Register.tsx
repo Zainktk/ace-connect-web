@@ -81,7 +81,7 @@ export const Register = () => {
                 errorMessage = err.response.data?.error || `Server error: ${err.response.status}`;
             } else if (err.request) {
                 // Request made but no response received
-                errorMessage = 'Network Error: Only ensure backend is running at http://localhost:3000';
+                errorMessage = 'Network Error: Cannot connect to server. Please check your internet or try again later.';
             } else {
                 // Something happened in setting up the request
                 errorMessage = err.message || 'Unknown error occurred';
