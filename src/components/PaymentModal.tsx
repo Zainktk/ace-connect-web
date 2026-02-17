@@ -4,7 +4,7 @@ import { stripePromise } from '../services/stripe';
 import { Button } from './Button';
 import api from '../services/api';
 
-const CheckoutForm = ({ clientSecret, onSuccess, onCancel }: { clientSecret: string, onSuccess: () => void, onCancel: () => void }) => {
+const CheckoutForm = ({ onSuccess, onCancel }: { onSuccess: () => void, onCancel: () => void }) => {
     const stripe = useStripe();
     const elements = useElements();
     const [error, setError] = useState<string | null>(null);
@@ -104,7 +104,6 @@ export const PaymentModal = ({ isOpen, onClose, eventId, amount, eventTitle }: P
                 ) : clientSecret ? (
                     <Elements stripe={stripePromise} options={{ clientSecret }}>
                         <CheckoutForm
-                            clientSecret={clientSecret}
                             onSuccess={() => {
                                 alert('Payment Successful! You have joined the event.');
                                 onClose();

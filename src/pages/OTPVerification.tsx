@@ -8,7 +8,7 @@ import { Input } from '../components/Input';
 export const OTPVerification = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const { login } = useAuth(); // We might use this after verification if we auto-login, but typically we just redirect to login
+    const { } = useAuth(); // We might use this after verification if we auto-login, but typically we just redirect to login
 
     const email = location.state?.email;
 
