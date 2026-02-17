@@ -39,7 +39,7 @@ export const FindMatch = () => {
         setLoading(true);
         try {
             if (activeTab === 'list' || activeTab === 'map') {
-                const response = await api.get('/matchmaking/requests?radius=10000');
+                const response = await api.get('/matchmaking/requests');
                 setRequests(response.data);
             } else if (activeTab === 'my_requests') {
                 const response = await api.get('/matchmaking/requests/my');
