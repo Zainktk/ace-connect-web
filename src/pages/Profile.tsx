@@ -41,14 +41,23 @@ export const Profile = () => {
         setError('');
         setMessage('');
 
+        const payload: any = {
+            name: formData.name,
+            bio: formData.bio,
+            location: formData.location,
+        };
+
+        const rating = parseFloat(formData.ntrpRating);
+        if (!isNaN(rating)) {
+            payload.ntrpRating = rating;
+        }
+
+        if (formData.photoUrl) {
+            payload.photoUrl = formData.photoUrl;
+        }
+
         try {
-            const response = await api.put('/profile', {
-                name: formData.name,
-                bio: formData.bio,
-                location: formData.location,
-                ntrpRating: parseFloat(formData.ntrpRating),
-                photoUrl: formData.photoUrl
-            });
+            const response = await api.put('/profile', payload);
 
             updateUser({
                 ...user!,
