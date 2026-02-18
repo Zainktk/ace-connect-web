@@ -8,37 +8,33 @@ export const Layout = ({ children }: { children: ReactNode }) => {
     const navigate = useNavigate();
 
     return (
-        <div className="min-h-screen bg-gray-50 flex flex-col">
-            <nav className="bg-white shadow-sm sticky top-0 z-50">
+        <div className="min-h-screen bg-[#09090b] text-[#fafafa] flex flex-col font-sans">
+            <nav className="glass sticky top-0 z-50 border-b border-zinc-800/50">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between h-16">
-                        <div className="flex items-center cursor-pointer flex-shrink-0" onClick={() => navigate('/dashboard')}>
-                            <span className="text-2xl font-bold text-green-600">AceConnect</span>
+                        <div className="flex items-center cursor-pointer flex-shrink-0 group" onClick={() => navigate('/dashboard')}>
+                            <span className="text-2xl font-black text-[#ccff00] transition-all group-hover:drop-shadow-[0_0_8px_rgba(204,255,0,0.5)]">ACE CONNECT</span>
                         </div>
 
                         {user ? (
-                            <div className="flex items-center space-x-4 overflow-x-auto no-scrollbar ml-4">
-                                <Link to="/dashboard" className="text-gray-600 hover:text-green-600 font-medium whitespace-nowrap">Dashboard</Link>
-                                <Link to="/find-match" className="text-gray-600 hover:text-green-600 font-medium whitespace-nowrap">Match</Link>
-                                <Link to="/events" className="text-gray-600 hover:text-green-600 font-medium whitespace-nowrap">Events</Link>
-                                <Link to="/players" className="text-gray-600 hover:text-green-600 font-medium whitespace-nowrap">Players</Link>
-                                <Link to="/chat" className="text-gray-600 hover:text-green-600 font-medium whitespace-nowrap">Messages</Link>
-                                {user.role === 'organizer' && (
-                                    <Link to="/create-event" className="text-gray-600 hover:text-green-600 font-medium whitespace-nowrap">Create Event</Link>
-                                )}
-                                <div className="h-6 w-px bg-gray-200 mx-2 flex-shrink-0"></div>
-                                <Link to="/profile" className="text-gray-700 text-sm hidden md:block hover:text-green-600 hover:underline whitespace-nowrap">
-                                    {user.email}
-                                </Link>
-                                <Button variant="secondary" onClick={logout} className="text-xs px-3 py-1 flex-shrink-0">
-                                    Logout
+                            <div className="flex items-center space-x-6 overflow-x-auto no-scrollbar ml-4">
+                                <Link to="/dashboard" className="text-zinc-400 hover:text-[#ccff00] font-bold text-xs uppercase tracking-widest transition-colors whitespace-nowrap">Home</Link>
+                                <Link to="/find-match" className="text-zinc-400 hover:text-[#ccff00] font-bold text-xs uppercase tracking-widest transition-colors whitespace-nowrap">Play</Link>
+                                <Link to="/events" className="text-zinc-400 hover:text-[#ccff00] font-bold text-xs uppercase tracking-widest transition-colors whitespace-nowrap">Events</Link>
+                                <Link to="/players" className="text-zinc-400 hover:text-[#ccff00] font-bold text-xs uppercase tracking-widest transition-colors whitespace-nowrap">Pro List</Link>
+                                <Link to="/chat" className="text-zinc-400 hover:text-[#ccff00] font-bold text-xs uppercase tracking-widest transition-colors whitespace-nowrap">Inbox</Link>
+
+                                <div className="h-6 w-px bg-zinc-800 mx-1 flex-shrink-0"></div>
+
+                                <Button variant="secondary" onClick={logout} className="text-[10px] px-3 py-1 font-black uppercase tracking-tighter">
+                                    Exit
                                 </Button>
                             </div>
                         ) : (
                             <div className="flex items-center space-x-4">
-                                <Link to="/login" className="text-gray-600 hover:text-green-600 font-medium">Login</Link>
-                                <Button onClick={() => navigate('/register')} className="text-xs px-3 py-1">
-                                    Sign Up
+                                <Link to="/login" className="text-zinc-400 hover:text-[#ccff00] font-bold text-xs uppercase tracking-widest transition-colors">Login</Link>
+                                <Button onClick={() => navigate('/register')} variant="neon" className="text-[10px] px-4 py-1 font-black uppercase tracking-tighter">
+                                    Join Now
                                 </Button>
                             </div>
                         )}
@@ -46,14 +42,16 @@ export const Layout = ({ children }: { children: ReactNode }) => {
                 </div>
             </nav>
 
-            <main className="flex-grow max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8">
-                {children}
+            <main className="flex-grow w-full py-8">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    {children}
+                </div>
             </main>
 
-            <footer className="bg-white border-t border-gray-200 mt-auto">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-                    <p className="text-center text-gray-500 text-sm">
-                        &copy; {new Date().getFullYear()} AceConnect. All rights reserved.
+            <footer className="bg-[#09090b] border-t border-zinc-900 mt-auto">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                    <p className="text-center text-zinc-600 text-[10px] font-black uppercase tracking-[0.2em]">
+                        &copy; {new Date().getFullYear()} ACE CONNECT. STRIVE FOR EXCELLENCE.
                     </p>
                 </div>
             </footer>

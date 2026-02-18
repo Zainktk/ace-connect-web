@@ -96,82 +96,100 @@ export const FindMatch = () => {
     };
 
     return (
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-5xl mx-auto space-y-8">
             {/* Header */}
-            <div className="flex justify-between items-center mb-6">
-                <h1 className="text-2xl font-bold text-gray-900">Matchmaking</h1>
+            <div className="flex justify-between items-end px-2">
+                <div>
+                    <h1 className="text-3xl font-black text-white italic tracking-tighter uppercase">Matchmaking</h1>
+                    <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest mt-1">Find your next opponent</p>
+                </div>
                 {(activeTab === 'list' || activeTab === 'map' || activeTab === 'my_requests') && (
-                    <Button onClick={() => navigate('/create-request')} size="sm">+ New</Button>
+                    <Button onClick={() => navigate('/create-request')} variant="neon" size="sm" className="rounded-xl px-6 font-black italic">+ NEW REQUEST</Button>
                 )}
             </div>
 
             {/* Tabs */}
-            <div className="flex border-b border-gray-200 mb-6 overflow-x-auto no-scrollbar">
-                <button
-                    onClick={() => setActiveTab('list')}
-                    className={`px-4 py-2 font-medium text-sm whitespace-nowrap ${activeTab === 'list' ? 'text-green-600 border-b-2 border-green-600' : 'text-gray-500 hover:text-gray-700'}`}
-                >
-                    List View
-                </button>
-                <button
-                    onClick={() => setActiveTab('map')}
-                    className={`px-4 py-2 font-medium text-sm whitespace-nowrap ${activeTab === 'map' ? 'text-green-600 border-b-2 border-green-600' : 'text-gray-500 hover:text-gray-700'}`}
-                >
-                    Map View
-                </button>
-                <button
-                    onClick={() => setActiveTab('my_requests')}
-                    className={`px-4 py-2 font-medium text-sm whitespace-nowrap ${activeTab === 'my_requests' ? 'text-green-600 border-b-2 border-green-600' : 'text-gray-500 hover:text-gray-700'}`}
-                >
-                    My Requests
-                </button>
-                <button
-                    onClick={() => setActiveTab('invitations')}
-                    className={`px-4 py-2 font-medium text-sm whitespace-nowrap ${activeTab === 'invitations' ? 'text-green-600 border-b-2 border-green-600' : 'text-gray-500 hover:text-gray-700'}`}
-                >
-                    Invitations {invitations.length > 0 && <span className="ml-1 bg-red-500 text-white text-xs px-1.5 rounded-full">{invitations.length}</span>}
-                </button>
+            <div className="flex gap-2 p-1 bg-zinc-900 border border-zinc-800 rounded-2xl overflow-x-auto no-scrollbar">
+                {[
+                    { id: 'list', label: 'LIST VIEW', icon: '📝' },
+                    { id: 'map', label: 'MAP VIEW', icon: '📍' },
+                    { id: 'my_requests', label: 'MY REQUESTS', icon: '👤' },
+                    { id: 'invitations', label: 'INVITES', icon: '🔔', count: invitations.length }
+                ].map(tab => (
+                    <button
+                        key={tab.id}
+                        onClick={() => setActiveTab(tab.id as Tab)}
+                        className={`flex items-center gap-2 px-6 py-3 rounded-xl font-black text-[10px] tracking-widest transition-all whitespace-nowrap
+                            ${activeTab === tab.id
+                                ? 'bg-zinc-800 text-[#ccff00] shadow-inner border border-zinc-700'
+                                : 'text-zinc-500 hover:text-zinc-300'
+                            }`}
+                    >
+                        <span>{tab.icon}</span>
+                        {tab.label}
+                        {tab.count ? (
+                            <span className="ml-1 bg-[#ccff00] text-black px-1.5 py-0.5 rounded text-[8px]">{tab.count}</span>
+                        ) : null}
+                    </button>
+                ))}
             </div>
 
             {/* Content */}
             {loading ? (
-                <div className="space-y-4">
-                    {[1, 2, 3].map(i => <div key={i} className="h-24 bg-gray-100 rounded-lg animate-pulse" />)}
+                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                    {[1, 2, 3].map(i => <div key={i} className="h-48 bg-zinc-900/50 rounded-[2.5rem] animate-pulse border border-zinc-800" />)}
                 </div>
             ) : (
-                <>
+                <div className="min-h-[400px]">
                     {/* List View */}
                     {activeTab === 'list' && (
                         requests.length === 0 ? (
-                            <div className="text-center py-12">
-                                <div className="text-4xl mb-3">🎾</div>
-                                <h3 className="text-lg font-medium text-gray-900">No Match Requests</h3>
-                                <p className="text-gray-500">Check back later for new match requests</p>
+                            <div className="text-center py-20 glass rounded-[3rem] border border-zinc-800/50">
+                                <div className="text-5xl mb-4 grayscale opacity-20">🎾</div>
+                                <h3 className="text-lg font-black text-white uppercase tracking-tighter">No Active Sessions</h3>
+                                <p className="text-zinc-600 text-xs font-bold uppercase tracking-widest mt-2">Check back when the courts are busy</p>
                             </div>
                         ) : (
-                            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                                 {requests.map(req => (
-                                    <div key={req.id} className="bg-white p-5 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-                                        <div className="flex justify-between items-start mb-2">
-                                            <span className={`px-2 py-1 rounded text-xs font-semibold ${req.match_type === 'singles' ? 'bg-blue-100 text-blue-800' : 'bg-purple-100 text-purple-800'}`}>
-                                                {req.match_type.toUpperCase()}
-                                            </span>
-                                            <span className="text-sm text-gray-500">
-                                                {req.preferred_date ? new Date(req.preferred_date).toLocaleDateString() : 'Flexible Date'}
-                                            </span>
+                                    <div key={req.id} className="glass group p-6 rounded-[2.5rem] border border-zinc-800/50 hover:border-[#ccff00]/30 transition-all relative overflow-hidden">
+                                        <div className="absolute top-0 right-0 -mr-8 -mt-8 h-20 w-20 rounded-full bg-[#ccff00]/5 blur-2xl group-hover:bg-[#ccff00]/10 transition-colors" />
+
+                                        <div className="flex justify-between items-start mb-6 relative z-10">
+                                            <div className="bg-zinc-950 px-3 py-1 rounded-full border border-zinc-800 text-[10px] font-black uppercase tracking-widest text-zinc-400">
+                                                {req.match_type}
+                                            </div>
+                                            <div className="text-[10px] font-mono text-zinc-600 font-bold">
+                                                {req.preferred_date ? new Date(req.preferred_date).toLocaleDateString() : 'OPEN DATE'}
+                                            </div>
                                         </div>
-                                        <h3 className="font-semibold text-lg text-gray-900 mb-1">{req.name || 'Unknown Player'}</h3>
-                                        <div className="flex items-center text-sm text-gray-600 mb-3">
-                                            <span className="bg-gray-100 px-2 py-0.5 rounded mr-2">NTRP {req.ntrp_rating}</span>
+
+                                        <div className="mb-6 relative z-10">
+                                            <h3 className="font-black text-white text-xl tracking-tight leading-none group-hover:text-[#ccff00] transition-colors">{req.name || 'ACE PLAYER'}</h3>
+                                            <p className="text-zinc-500 text-[10px] font-bold uppercase tracking-widest mt-1.5">{req.location || 'Unknown Venue'}</p>
                                         </div>
+
+                                        <div className="flex items-center gap-4 mb-6 relative z-10">
+                                            <div className="bg-zinc-900/80 px-4 py-2 rounded-2xl border border-zinc-800">
+                                                <p className="text-[8px] text-zinc-500 font-black uppercase tracking-widest leading-none">Rating</p>
+                                                <p className="text-[#ccff00] font-black text-md leading-tight mt-0.5">{req.ntrp_rating}</p>
+                                            </div>
+                                            {req.compatibility_score && (
+                                                <div className="bg-zinc-900/80 px-4 py-2 rounded-2xl border border-zinc-800">
+                                                    <p className="text-[8px] text-zinc-500 font-black uppercase tracking-widest leading-none">Match</p>
+                                                    <p className="text-white font-black text-md leading-tight mt-0.5">{req.compatibility_score}%</p>
+                                                </div>
+                                            )}
+                                        </div>
+
                                         <Button
-                                            variant="outline"
-                                            className="w-full text-sm"
+                                            variant={sentInvitations.includes(req.id) ? "secondary" : "neon"}
+                                            className="w-full text-[10px] font-black uppercase tracking-widest rounded-2xl py-3"
                                             onClick={() => handleSendInvite(req.id)}
                                             isLoading={sendingInvite === req.id}
                                             disabled={req.user_id === user?.id || sentInvitations.includes(req.id)}
                                         >
-                                            {req.user_id === user?.id ? 'Your Request' : (sentInvitations.includes(req.id) ? 'Invitation Sent' : 'Send Invite')}
+                                            {req.user_id === user?.id ? 'Your Request' : (sentInvitations.includes(req.id) ? 'INVITATION SENT' : 'SEND INVITE')}
                                         </Button>
                                     </div>
                                 ))}
@@ -181,29 +199,38 @@ export const FindMatch = () => {
 
                     {/* Map View */}
                     {activeTab === 'map' && (
-                        <MapView
-                            requests={requests}
-                            onRequestClick={(req) => handleSendInvite(req.id)}
-                            sentInvitations={sentInvitations}
-                        />
+                        <div className="rounded-[3rem] overflow-hidden border border-zinc-800 shadow-2xl">
+                            <MapView
+                                requests={requests}
+                                onRequestClick={(req) => handleSendInvite(req.id)}
+                                sentInvitations={sentInvitations}
+                            />
+                        </div>
                     )}
 
                     {/* My Requests */}
                     {activeTab === 'my_requests' && (
                         myRequests.length === 0 ? (
-                            <div className="text-center py-12">
-                                <p className="text-gray-500">You haven't created any requests yet.</p>
-                                <Button className="mt-4" onClick={() => navigate('/create-request')}>Create Request</Button>
+                            <div className="text-center py-20 glass rounded-[3rem] border border-zinc-800/50">
+                                <p className="text-zinc-600 text-xs font-bold uppercase tracking-widest">No active requests found.</p>
+                                <Button className="mt-6 rounded-2xl px-8" variant="neon" onClick={() => navigate('/create-request')}>CREATE NEW</Button>
                             </div>
                         ) : (
-                            <div className="grid gap-4">
+                            <div className="grid gap-4 max-w-2xl mx-auto">
                                 {myRequests.map(req => (
-                                    <div key={req.id} className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 flex justify-between items-center">
-                                        <div>
-                                            <div className="font-semibold text-gray-900">{req.match_type.toUpperCase()} Match</div>
-                                            <div className="text-sm text-gray-500">{req.preferred_date ? new Date(req.preferred_date).toLocaleDateString() : new Date(req.created_at).toLocaleDateString()} • {req.status}</div>
+                                    <div key={req.id} className="glass p-6 rounded-[2.5rem] border border-zinc-800/50 flex justify-between items-center group hover:border-zinc-600 transition-all">
+                                        <div className="flex gap-4 items-center">
+                                            <div className="h-12 w-12 rounded-2xl bg-zinc-950 flex items-center justify-center text-xl grayscale opacity-50 group-hover:grayscale-0 group-hover:opacity-100 transition-all">
+                                                {req.match_type === 'singles' ? '👤' : '👥'}
+                                            </div>
+                                            <div>
+                                                <div className="font-black text-white text-lg tracking-tight italic uppercase">{req.match_type} Session</div>
+                                                <div className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest mt-1">
+                                                    {req.preferred_date ? new Date(req.preferred_date).toDateString() : 'Flexible'} ● <span className="text-[#ccff00] animate-pulse">{req.status}</span>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <Button size="sm" variant="outline" onClick={() => navigate(`/create-request?edit=${req.id}`)}>Edit</Button>
+                                        <Button size="sm" variant="secondary" className="rounded-xl px-6 font-black text-[10px]" onClick={() => navigate(`/create-request?edit=${req.id}`)}>EDIT</Button>
                                     </div>
                                 ))}
                             </div>
@@ -213,33 +240,44 @@ export const FindMatch = () => {
                     {/* Invitations */}
                     {activeTab === 'invitations' && (
                         invitations.length === 0 ? (
-                            <div className="text-center py-12 text-gray-500">
-                                No pending invitations.
+                            <div className="text-center py-20 glass rounded-[3rem] border border-zinc-800/50">
+                                <p className="text-zinc-600 text-xs font-bold uppercase tracking-widest">Inboxes are clear.</p>
                             </div>
                         ) : (
-                            <div className="grid gap-4 md:grid-cols-2">
+                            <div className="grid gap-6 md:grid-cols-2 max-w-4xl mx-auto">
                                 {invitations.map(inv => (
-                                    <div key={inv.id} className="bg-white p-4 rounded-lg shadow-sm border border-orange-100">
-                                        <div className="flex items-center gap-3 mb-3">
-                                            <div className="h-10 w-10 rounded-full bg-gray-200 overflow-hidden">
-                                                {inv.sender_photo ? <img src={inv.sender_photo} className="w-full h-full object-cover" /> : <span className="flex items-center justify-center h-full w-full text-lg">👤</span>}
+                                    <div key={inv.id} className="glass p-6 rounded-[2.5rem] border border-[#ccff00]/20 relative overflow-hidden shadow-[0_0_20px_rgba(204,255,0,0.05)]">
+                                        <div className="absolute top-0 right-0 p-4">
+                                            <div className="h-2 w-2 rounded-full bg-[#ccff00] animate-ping" />
+                                        </div>
+
+                                        <div className="flex items-center gap-5 mb-6">
+                                            <div className="h-16 w-16 rounded-2xl bg-zinc-900 border border-zinc-800 overflow-hidden shadow-xl">
+                                                {inv.sender_photo ? <img src={inv.sender_photo} className="w-full h-full object-cover" /> : <span className="flex items-center justify-center h-full w-full text-3xl">👤</span>}
                                             </div>
                                             <div>
-                                                <p className="font-semibold text-gray-900">{inv.sender_name} invited you!</p>
-                                                <p className="text-xs text-gray-500">{inv.match_type} • {inv.location}</p>
+                                                <p className="text-[10px] text-[#ccff00] font-black uppercase tracking-[0.2em] leading-none mb-1.5">New Invitation</p>
+                                                <h3 className="font-black text-white text-xl tracking-tight leading-tight">{inv.sender_name}</h3>
+                                                <p className="text-[10px] text-zinc-500 font-bold mt-1 uppercase tracking-widest">{inv.match_type} ● {inv.location}</p>
                                             </div>
                                         </div>
-                                        {inv.message && <p className="text-sm text-gray-600 mb-3 bg-gray-50 p-2 rounded">"{inv.message}"</p>}
-                                        <div className="flex gap-2">
-                                            <Button size="sm" className="flex-1" onClick={() => handleAcceptInvite(inv.id)}>Accept</Button>
-                                            <Button size="sm" variant="outline" className="flex-1 border-gray-300 text-gray-600" onClick={() => handleDeclineInvite(inv.id)}>Decline</Button>
+
+                                        {inv.message && (
+                                            <div className="bg-zinc-950/80 border border-zinc-800 p-4 rounded-2xl mb-6">
+                                                <p className="text-zinc-400 text-xs italic leading-relaxed">"{inv.message}"</p>
+                                            </div>
+                                        )}
+
+                                        <div className="flex gap-3">
+                                            <Button size="sm" variant="neon" className="flex-1 rounded-xl font-black text-[10px]" onClick={() => handleAcceptInvite(inv.id)}>ACCEPT</Button>
+                                            <Button size="sm" variant="secondary" className="flex-1 rounded-xl font-black text-[10px]" onClick={() => handleDeclineInvite(inv.id)}>DECLINE</Button>
                                         </div>
                                     </div>
                                 ))}
                             </div>
                         )
                     )}
-                </>
+                </div>
             )}
         </div>
     );

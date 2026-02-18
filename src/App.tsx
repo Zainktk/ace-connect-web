@@ -15,7 +15,16 @@ import { Chat } from './pages/Chat';
 import { FindMatch } from './pages/FindMatch';
 
 // Placeholder for 404
-const NotFound = () => <div className="p-8 text-center text-gray-500">404 - Page Not Found</div>;
+const NotFound = () => (
+  <div className="flex flex-col items-center justify-center p-20 text-center">
+    <div className="h-24 w-24 rounded-[2rem] bg-zinc-900 border border-zinc-800 flex items-center justify-center text-4xl mb-8 grayscale opacity-20">🚫</div>
+    <h1 className="text-4xl font-black text-white italic tracking-tighter uppercase mb-4">Void Detected</h1>
+    <p className="text-zinc-500 text-xs font-black uppercase tracking-widest leading-relaxed max-w-xs">
+      The circuit you are looking for does not exist or has been decommissioned.
+    </p>
+    <Navigate to="/dashboard" replace />
+  </div>
+);
 
 // Protected Route Wrapper
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {

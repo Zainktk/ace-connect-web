@@ -52,71 +52,75 @@ export const OTPVerification = () => {
 
     if (!email) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-                <div className="text-center">
-                    <h2 className="text-xl font-bold text-gray-900">Error</h2>
-                    <p className="text-gray-600 mb-4">No email provided for verification.</p>
-                    <Button onClick={() => navigate('/login')}>Go to Login</Button>
+            <div className="min-h-screen flex items-center justify-center bg-[#09090b] px-4">
+                <div className="text-center glass p-10 rounded-[2.5rem] border border-zinc-800/50">
+                    <h2 className="text-2xl font-black text-white italic uppercase tracking-tighter">System Error</h2>
+                    <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest mt-4">No mission parameters found.</p>
+                    <Button onClick={() => navigate('/login')} variant="neon" className="mt-8 px-10 py-4 rounded-2xl font-black uppercase italic tracking-widest text-[10px]">
+                        RETURN TO BASE
+                    </Button>
                 </div>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-            <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8">
-                <div className="text-center mb-8">
-                    <h1 className="text-3xl font-bold text-gray-900">Verify Your Email</h1>
-                    <p className="text-gray-600 mt-2">
-                        We sent a 6-digit code to <span className="font-semibold">{email}</span>
+        <div className="min-h-screen flex items-center justify-center bg-[#09090b] px-4">
+            <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 pointer-events-none">
+                <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#ccff00]/10 blur-[120px] rounded-full"></div>
+                <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-[#ccff00]/5 blur-[120px] rounded-full"></div>
+            </div>
+
+            <div className="max-w-md w-full glass rounded-[2.5rem] p-10 border border-zinc-800/50 shadow-2xl relative">
+                <div className="text-center mb-10">
+                    <h1 className="text-4xl font-black text-white italic tracking-tighter uppercase leading-none">Initialize</h1>
+                    <p className="text-zinc-500 text-[10px] font-bold uppercase tracking-[0.2em] mt-3">
+                        COMMS SENT TO <span className="text-white">{email}</span>
                     </p>
                 </div>
 
                 {error && (
-                    <div className="bg-red-50 text-red-600 p-3 rounded-lg mb-4 text-sm">
+                    <div className="bg-red-500/10 border border-red-500/30 text-red-500 p-4 rounded-2xl mb-6 text-[10px] font-black uppercase tracking-widest text-center">
                         {error}
                     </div>
                 )}
 
                 {message && (
-                    <div className="bg-green-50 text-green-600 p-3 rounded-lg mb-4 text-sm">
+                    <div className="bg-[#ccff00]/10 border border-[#ccff00]/30 text-[#ccff00] p-4 rounded-2xl mb-6 text-[10px] font-black uppercase tracking-widest text-center">
                         {message}
                     </div>
                 )}
 
-                <form onSubmit={handleVerify}>
+                <form onSubmit={handleVerify} className="space-y-6">
                     <Input
-                        label="Enter 6-digit Code"
+                        label="6-DIGIT ENCRYPTION CODE"
                         value={otp}
                         onChange={(e) => setOtp(e.target.value)}
-                        placeholder="123456"
+                        placeholder="000000"
                         maxLength={6}
                         required
-                        className="text-center text-2xl tracking-widest"
+                        className="text-center text-3xl font-black italic tracking-[0.5em] h-20 bg-zinc-950/50"
                     />
 
-                    <Button type="submit" className="w-full mt-4" isLoading={loading}>
-                        Verify Account
+                    <Button type="submit" variant="neon" className="w-full h-14 rounded-2xl font-black italic uppercase tracking-widest text-xs" isLoading={loading}>
+                        VERIFY & AUTHENTICATE
                     </Button>
                 </form>
 
-                <div className="mt-6 text-center text-sm text-gray-600">
-                    Didn't receive the code?{' '}
+                <div className="mt-10 text-center flex flex-col gap-4">
                     <button
                         onClick={handleResend}
-                        className="text-green-600 font-semibold hover:text-green-700 disabled:opacity-50"
+                        className="text-[10px] text-zinc-500 font-black uppercase tracking-widest hover:text-[#ccff00] transition-colors disabled:opacity-30"
                         disabled={loading}
                     >
-                        Resend Code
+                        RESEND COMMS CODE
                     </button>
-                </div>
 
-                <div className="mt-4 text-center text-sm">
                     <button
                         onClick={() => navigate('/login')}
-                        className="text-gray-500 hover:text-gray-700"
+                        className="text-[10px] text-zinc-700 font-black uppercase tracking-widest hover:text-white transition-colors"
                     >
-                        Back to Login
+                        ABORT & LOGIN
                     </button>
                 </div>
             </div>

@@ -14,6 +14,10 @@ export interface User {
     photoUrl?: string;
     latitude?: number;
     longitude?: number;
+    xp?: number;
+    level?: number;
+    streak?: number;
+    achievements?: any[];
 }
 
 export interface Profile {
@@ -29,6 +33,10 @@ export interface Profile {
     longitude?: number;
     photo_url?: string;
     phone_number?: string;
+    xp?: number;
+    level?: number;
+    streak?: number;
+    achievements?: any[];
 }
 
 export interface MatchRequest {

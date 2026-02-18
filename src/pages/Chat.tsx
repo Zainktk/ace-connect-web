@@ -105,34 +105,37 @@ export const Chat = () => {
     }
 
     return (
-        <div className="flex h-[calc(100vh-100px)] bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
+        <div className="flex flex-col md:flex-row h-[calc(100vh-140px)] glass rounded-[2.5rem] overflow-hidden border border-zinc-800/50 shadow-2xl">
             {/* Sidebar: Match List */}
-            <div className={`w-full md:w-1/3 border-r border-gray-200 bg-gray-50 flex flex-col ${selectedMatch ? 'hidden md:flex' : 'flex'}`}>
-                <div className="p-4 border-b border-gray-200 bg-white">
-                    <h2 className="font-bold text-lg text-gray-800">Messages</h2>
+            <div className={`w-full md:w-80 border-r border-zinc-800/50 bg-zinc-950/50 flex flex-col ${selectedMatch ? 'hidden md:flex' : 'flex'}`}>
+                <div className="p-6 border-b border-zinc-800/50">
+                    <h2 className="text-lg font-black text-white italic tracking-tighter uppercase">Channels</h2>
+                    <p className="text-[10px] text-zinc-500 font-bold uppercase tracking-widest mt-1">Live Match Comms</p>
                 </div>
-                <div className="flex-1 overflow-y-auto">
+                <div className="flex-1 overflow-y-auto no-scrollbar">
                     {matches.length === 0 ? (
-                        <div className="p-4 text-center text-gray-500 text-sm">No matches yet. Join an event or create a request!</div>
+                        <div className="p-10 text-center">
+                            <p className="text-zinc-600 text-[10px] font-bold uppercase tracking-widest leading-relaxed">No active circuits. Connect with athletes to start comms.</p>
+                        </div>
                     ) : (
                         matches.map(match => (
                             <div
                                 key={match.id}
                                 onClick={() => setSelectedMatch(match)}
-                                className={`p-4 border-b border-gray-100 cursor-pointer hover:bg-white transition-colors flex items-center gap-3 ${selectedMatch?.id === match.id ? 'bg-white border-l-4 border-l-green-500 shadow-sm' : ''}`}
+                                className={`p-5 cursor-pointer transition-all border-b border-zinc-800/30 flex items-center gap-4 group ${selectedMatch?.id === match.id ? 'bg-[#ccff00]/5 border-r-4 border-r-[#ccff00]' : 'hover:bg-zinc-900/50'}`}
                             >
-                                <div className="h-10 w-10 rounded-full bg-gray-300 overflow-hidden flex-shrink-0">
+                                <div className="h-12 w-12 rounded-xl bg-zinc-900 border border-zinc-800 overflow-hidden flex-shrink-0 shadow-lg group-hover:border-[#ccff00]/30 transition-colors">
                                     {match.opponent_photo ? (
                                         <img src={match.opponent_photo} alt={match.opponent_name} className="h-full w-full object-cover" />
                                     ) : (
-                                        <div className="h-full w-full flex items-center justify-center text-white font-bold bg-green-500">
+                                        <div className="h-full w-full flex items-center justify-center text-zinc-600 font-black text-xl italic uppercase bg-zinc-950">
                                             {match.opponent_name?.[0]?.toUpperCase() || '?'}
                                         </div>
                                     )}
                                 </div>
                                 <div className="overflow-hidden">
-                                    <h3 className="font-semibold text-gray-900 truncate">{match.opponent_name}</h3>
-                                    <p className="text-xs text-gray-500 truncate">{match.match_type} • {new Date(match.scheduled_time || match.created_at).toLocaleDateString()}</p>
+                                    <h3 className={`font-black tracking-tight text-sm truncate uppercase italic transition-colors ${selectedMatch?.id === match.id ? 'text-[#ccff00]' : 'text-zinc-300 group-hover:text-white'}`}>{match.opponent_name}</h3>
+                                    <p className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest mt-1 truncate">{match.match_type} • {new Date(match.scheduled_time || match.created_at).toLocaleDateString()}</p>
                                 </div>
                             </div>
                         ))
@@ -141,31 +144,39 @@ export const Chat = () => {
             </div>
 
             {/* Main: Chat Window */}
-            <div className={`flex-1 flex flex-col bg-white ${!selectedMatch ? 'hidden md:flex' : 'flex'}`}>
+            <div className={`flex-1 flex flex-col bg-zinc-900/20 ${!selectedMatch ? 'hidden md:flex' : 'flex'}`}>
                 {selectedMatch ? (
                     <>
                         {/* Header */}
-                        <div className="p-4 border-b border-gray-200 flex items-center justify-between bg-gray-50">
-                            <div className="flex items-center gap-3">
+                        <div className="p-5 border-b border-zinc-800/50 flex items-center justify-between bg-zinc-950/30">
+                            <div className="flex items-center gap-4">
                                 <Button
-                                    className="md:hidden px-2 py-1 text-xs"
-                                    variant="outline"
+                                    className="md:hidden h-8 w-8 !p-0 rounded-lg"
+                                    variant="secondary"
                                     onClick={() => setSelectedMatch(null)}
                                 >
-                                    ← Back
+                                    ←
                                 </Button>
-                                <h2 className="font-bold text-gray-800">{selectedMatch.opponent_name}</h2>
-                                <span className="text-xs px-2 py-0.5 rounded-full bg-green-100 text-green-800 uppercase">{selectedMatch.match_type}</span>
+                                <div className="flex flex-col">
+                                    <h2 className="font-black text-white italic uppercase tracking-tight leading-none">{selectedMatch.opponent_name}</h2>
+                                    <span className="text-[8px] font-black uppercase tracking-tighter text-[#ccff00] mt-1">ENCRYPTED PERFORMANCE CHANNEL</span>
+                                </div>
+                            </div>
+                            <div className="px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-[8px] font-black text-zinc-400 uppercase tracking-widest">
+                                {selectedMatch.match_type}
                             </div>
                         </div>
 
                         {/* Messages */}
-                        <div className="flex-1 overflow-y-auto p-4 space-y-3 bg-gray-50/50">
+                        <div className="flex-1 overflow-y-auto p-6 space-y-4 no-scrollbar">
                             {messages.map((msg, index) => {
                                 const isMe = msg.sender_id === user?.id;
                                 return (
                                     <div key={index} className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}>
-                                        <div className={`max-w-[70%] rounded-lg px-4 py-2 text-sm shadow-sm ${isMe ? 'bg-green-500 text-white rounded-br-none' : 'bg-white text-gray-800 border border-gray-200 rounded-bl-none'}`}>
+                                        <div className={`max-w-[80%] md:max-w-[60%] rounded-2xl px-5 py-3 text-sm font-medium tracking-tight shadow-xl ${isMe
+                                            ? 'bg-[#ccff00] text-black rounded-br-none italic font-bold'
+                                            : 'glass text-zinc-100 border border-zinc-800/50 rounded-bl-none'
+                                            }`}>
                                             {msg.content}
                                         </div>
                                     </div>
@@ -175,22 +186,26 @@ export const Chat = () => {
                         </div>
 
                         {/* Input */}
-                        <div className="p-4 border-t border-gray-200 bg-white">
-                            <form onSubmit={handleSendMessage} className="flex gap-2">
+                        <div className="p-6 border-t border-zinc-800/50 bg-zinc-950/30">
+                            <form onSubmit={handleSendMessage} className="flex gap-4">
                                 <input
                                     type="text"
                                     value={newMessage}
                                     onChange={(e) => setNewMessage(e.target.value)}
-                                    placeholder="Type a message..."
-                                    className="flex-1 rounded-full border-gray-300 focus:border-green-500 focus:ring-green-500 px-4 py-2 border shadow-sm"
+                                    placeholder="Execute comms message..."
+                                    className="flex-1 bg-zinc-900 border border-zinc-800 text-zinc-100 rounded-2xl px-6 py-4 focus:outline-none focus:ring-2 focus:ring-[#ccff00]/30 transition-all placeholder:text-zinc-600 text-sm font-medium"
                                 />
-                                <Button type="submit" className="rounded-full px-6">Send</Button>
+                                <Button type="submit" variant="neon" className="rounded-2xl px-8 h-14 font-black italic uppercase tracking-widest text-[10px]">
+                                    SEND
+                                </Button>
                             </form>
                         </div>
                     </>
                 ) : (
-                    <div className="flex-1 flex items-center justify-center text-gray-400 bg-gray-50">
-                        Select a conversation to start chatting
+                    <div className="flex-1 flex flex-col items-center justify-center text-center p-10">
+                        <div className="h-20 w-20 rounded-3xl bg-zinc-900 flex items-center justify-center text-3xl opacity-20 mb-6 grayscale border border-zinc-800">💬</div>
+                        <h3 className="text-zinc-500 font-black italic uppercase tracking-widest text-sm">Select Archive</h3>
+                        <p className="text-zinc-600 text-[10px] font-bold uppercase tracking-[0.2em] mt-2">Initialize match encrypted communications</p>
                     </div>
                 )}
             </div>

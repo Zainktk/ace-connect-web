@@ -93,59 +93,70 @@ export const Register = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-8">
-            <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8">
-                <div className="text-center mb-6">
-                    <h1 className="text-3xl font-bold text-gray-900">Join AceConnect</h1>
-                    <p className="text-gray-600 mt-2">Create your free account</p>
+        <div className="min-h-screen flex items-center justify-center px-4 py-12 relative overflow-hidden bg-zinc-950">
+            {/* Background Accents */}
+            <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+                <div className="absolute top-[-10%] right-[-10%] w-[50%] h-[50%] bg-[#ccff00]/5 blur-[150px] rounded-full" />
+                <div className="absolute bottom-[-10%] left-[-10%] w-[50%] h-[50%] bg-[#ccff00]/5 blur-[150px] rounded-full" />
+            </div>
+
+            <div className="max-w-xl w-full glass rounded-[3rem] p-10 border border-zinc-800/50 shadow-2xl relative z-10">
+                <div className="text-center mb-10">
+                    <div className="inline-block px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-[10px] font-black tracking-[0.2em] text-[#ccff00] mb-4 uppercase">
+                        Drafting Now
+                    </div>
+                    <h1 className="text-4xl font-black text-white italic tracking-tighter uppercase leading-none">JOIN THE ELITE</h1>
+                    <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest mt-3">Start your journey with ACE CONNECT</p>
                 </div>
 
                 {error && (
-                    <div className="bg-red-50 text-red-600 p-3 rounded-lg mb-4 text-sm">
+                    <div className="bg-red-500/10 border border-red-500/30 text-red-500 p-4 rounded-2xl mb-8 text-xs font-bold text-center">
                         {error}
                     </div>
                 )}
 
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} className="space-y-6">
                     {/* Role Toggle */}
-                    <div className="flex bg-gray-100 p-1 rounded-lg mb-6">
+                    <div className="flex bg-zinc-900 p-1.5 rounded-2xl border border-zinc-800 mb-8">
                         <button
                             type="button"
-                            className={`flex-1 py-2 rounded-md text-sm font-medium transition-all ${formData.role === 'player' ? 'bg-white shadow text-green-700' : 'text-gray-500'}`}
+                            className={`flex-1 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${formData.role === 'player' ? 'bg-[#ccff00] text-black shadow-lg' : 'text-zinc-500 hover:text-zinc-300'}`}
                             onClick={() => setFormData({ ...formData, role: 'player' })}
                         >
-                            Player
+                            ATHLETE
                         </button>
                         <button
                             type="button"
-                            className={`flex-1 py-2 rounded-md text-sm font-medium transition-all ${formData.role === 'organizer' ? 'bg-white shadow text-green-700' : 'text-gray-500'}`}
+                            className={`flex-1 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${formData.role === 'organizer' ? 'bg-[#ccff00] text-black shadow-lg' : 'text-zinc-500 hover:text-zinc-300'}`}
                             onClick={() => setFormData({ ...formData, role: 'organizer' })}
                         >
-                            Organizer
+                            PROMOTER
                         </button>
                     </div>
 
-                    <Input
-                        label="Full Name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        placeholder="John Doe"
-                        required
-                    />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6">
+                        <Input
+                            label="Athlete Name"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleChange}
+                            placeholder="John Doe"
+                            required
+                        />
+
+                        <Input
+                            label="Email Address"
+                            type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            placeholder="john@example.com"
+                            required
+                        />
+                    </div>
 
                     <Input
-                        label="Email"
-                        type="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        placeholder="john@example.com"
-                        required
-                    />
-
-                    <Input
-                        label="Password"
+                        label="Security Key"
                         type="password"
                         name="password"
                         value={formData.password}
@@ -156,8 +167,8 @@ export const Register = () => {
                     />
 
                     {formData.role === 'player' && (
-                        <>
-                            <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-6">
+                            <div className="grid grid-cols-2 gap-6">
                                 <Select
                                     label="Gender"
                                     name="gender"
@@ -170,7 +181,7 @@ export const Register = () => {
                                     ]}
                                 />
                                 <Select
-                                    label="Skill Level (NTRP)"
+                                    label="NTRP Skill Pool"
                                     name="skillLevel"
                                     value={formData.skillLevel}
                                     onChange={handleChange}
@@ -188,7 +199,7 @@ export const Register = () => {
                             </div>
 
                             <Input
-                                label="Years of Experience"
+                                label="Tour Experience (Years)"
                                 type="number"
                                 name="yearsExperience"
                                 value={formData.yearsExperience}
@@ -196,25 +207,29 @@ export const Register = () => {
                                 min="0"
                                 required
                             />
-                        </>
-                    )}
-
-                    {formData.role === 'organizer' && (
-                        <div className="bg-green-50 p-4 rounded-lg mb-4 text-sm text-green-800 border border-green-200">
-                            <span className="font-bold">Organizer Account:</span> You will be able to create tournaments, manage entries, and collect payments.
                         </div>
                     )}
 
-                    <Button type="submit" className="w-full mt-4" isLoading={loading}>
-                        Create Account
+                    {formData.role === 'organizer' && (
+                        <div className="bg-[#ccff00]/5 p-5 rounded-2xl mb-4 border border-[#ccff00]/20">
+                            <p className="text-[#ccff00] text-[10px] font-black uppercase tracking-widest leading-relaxed">
+                                <span className="mr-2">⚡</span> Promoter Status Detected: You will have access to event creation, entry management, and automated payout systems.
+                            </p>
+                        </div>
+                    )}
+
+                    <Button type="submit" variant="neon" className="w-full py-4 rounded-2xl font-black italic uppercase tracking-widest" isLoading={loading}>
+                        FINALIZE DRAFT
                     </Button>
                 </form>
 
-                <div className="mt-6 text-center text-sm text-gray-600">
-                    Already have an account?{' '}
-                    <Link to="/login" className="text-green-600 font-semibold hover:text-green-700">
-                        Log in
-                    </Link>
+                <div className="mt-10 text-center">
+                    <p className="text-zinc-600 text-[10px] font-bold uppercase tracking-widest">
+                        Already in the system?{' '}
+                        <Link to="/login" className="text-[#ccff00] hover:text-[#a3e635] transition-colors ml-1 underline decoration-2 underline-offset-4">
+                            AUTH NOW
+                        </Link>
+                    </p>
                 </div>
             </div>
         </div>

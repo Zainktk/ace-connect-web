@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import api from '../services/api';
 import { Button } from '../components/Button';
 import { Input } from '../components/Input';
+import { LevelBadge } from '../components/LevelBadge';
 import type { User } from '../types';
 
 export const Players = () => {
@@ -15,13 +16,6 @@ export const Players = () => {
 
     const fetchPlayers = async () => {
         try {
-            // Assuming we have an endpoint to list users or search them
-            // If not, we might need to create one or use a different endpoint
-            // For now, let's try a hypothetical search endpoint or just list match requests as proxy?
-            // Wait, we can use /api/matchmaking/requests to find people looking for matches.
-            // Or if there is a /api/users endpoint. Let's check server routes.
-            // Based on server.js: app.use('/api/users', userRoutes);
-
             const response = await api.get('/users');
             setPlayers(response.data);
         } catch (error) {
@@ -37,51 +31,62 @@ export const Players = () => {
     );
 
     return (
-        <div>
-            <div className="flex justify-between items-center mb-6">
-                <h1 className="text-2xl font-bold text-gray-900">Find Players 🎾</h1>
-                <div className="w-64">
+        <div className="max-w-6xl mx-auto space-y-8">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 px-2">
+                <div>
+                    <h1 className="text-3xl font-black text-white italic tracking-tighter uppercase">PRO LIST</h1>
+                    <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest mt-1">Connect with the elite community</p>
+                </div>
+                <div className="w-full md:w-80">
                     <Input
                         name="search"
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        placeholder="Search by name or location..."
+                        placeholder="Search athletes or venues..."
+                        className="rounded-2xl"
                     />
                 </div>
             </div>
 
             {loading ? (
-                <div className="space-y-4">
-                    {[1, 2, 3].map(i => (
-                        <div key={i} className="h-20 bg-gray-200 rounded-lg animate-pulse" />
+                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                    {[1, 2, 3, 4, 5, 6].map(i => (
+                        <div key={i} className="h-28 bg-zinc-900/50 rounded-[2rem] animate-pulse border border-zinc-800" />
                     ))}
                 </div>
             ) : filteredPlayers.length === 0 ? (
-                <div className="text-center py-12 bg-white rounded-lg shadow">
-                    <p className="text-gray-500">No players found.</p>
+                <div className="text-center py-20 glass rounded-[3rem] border border-zinc-800/50">
+                    <p className="text-zinc-600 text-xs font-bold uppercase tracking-widest">No athletes found on current form.</p>
                 </div>
             ) : (
-                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                     {filteredPlayers.map(player => (
-                        <div key={player.id} className="bg-white p-5 rounded-lg shadow hover:shadow-md transition-shadow flex items-center space-x-4">
-                            <div className="h-12 w-12 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden border border-gray-300 flex-shrink-0">
-                                {player.photoUrl ? (
-                                    <img src={player.photoUrl} alt={player.name} className="h-full w-full object-cover" />
-                                ) : (
-                                    <span className="text-xl">👤</span>
-                                )}
+                        <div key={player.id} className="glass p-5 rounded-[2.5rem] border border-zinc-800/50 hover:border-[#ccff00]/30 transition-all flex items-center space-x-5 group">
+                            <div className="relative flex-shrink-0">
+                                <div className="h-16 w-16 rounded-2xl bg-zinc-900 border border-zinc-800 overflow-hidden shadow-xl group-hover:border-[#ccff00]/30 transition-colors">
+                                    {player.photoUrl ? (
+                                        <img src={player.photoUrl} alt={player.name} className="h-full w-full object-cover" />
+                                    ) : (
+                                        <span className="flex items-center justify-center h-full w-full text-2xl grayscale opacity-30">👤</span>
+                                    )}
+                                </div>
+                                <div className="absolute -bottom-1 -right-1">
+                                    <LevelBadge level={player.level || 1} className="scale-75" />
+                                </div>
                             </div>
+
                             <div className="flex-1 min-w-0">
-                                <h3 className="text-lg font-medium text-gray-900 truncate">{player.name || 'Unknown Player'}</h3>
-                                <p className="text-sm text-gray-500 truncate">{player.location || 'No location'}</p>
-                                <div className="flex items-center mt-1">
-                                    <span className="bg-green-100 text-green-800 text-xs px-2 py-0.5 rounded-full mr-2">
-                                        NTRP {player.ntrpRating || '?'}
+                                <h3 className="text-white font-black text-lg tracking-tight truncate leading-none mb-1 group-hover:text-[#ccff00] transition-colors uppercase italic">{player.name || 'ACE PLAYER'}</h3>
+                                <p className="text-zinc-500 text-[10px] font-bold uppercase tracking-widest truncate">{player.location || 'Unknown Venue'}</p>
+                                <div className="flex items-center mt-2">
+                                    <span className="bg-zinc-950 text-[#ccff00] text-[8px] font-black uppercase tracking-tighter px-2 py-0.5 rounded-full border border-zinc-800">
+                                        NTRP {player.ntrpRating || '0.0'}
                                     </span>
                                 </div>
                             </div>
-                            <Button variant="outline" className="text-sm px-3" onClick={() => window.alert('Chat/Connect coming soon!')}>
-                                Message
+
+                            <Button variant="secondary" className="rounded-xl px-3 h-10 font-black text-[10px]" onClick={() => window.alert('DM functionality coming soon!')}>
+                                MSG
                             </Button>
                         </div>
                     ))}

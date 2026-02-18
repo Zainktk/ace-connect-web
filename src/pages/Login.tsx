@@ -45,32 +45,41 @@ export const Login = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-            <div className="max-w-md w-full bg-white rounded-xl shadow-lg p-8">
-                <div className="text-center mb-8">
-                    <h1 className="text-3xl font-bold text-gray-900">AceConnect</h1>
-                    <p className="text-gray-600 mt-2">Sign in to your account</p>
+        <div className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden bg-zinc-950">
+            {/* Background Accents */}
+            <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+                <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#ccff00]/5 blur-[120px] rounded-full" />
+                <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-[#ccff00]/5 blur-[120px] rounded-full" />
+            </div>
+
+            <div className="max-w-md w-full glass rounded-[2.5rem] p-10 border border-zinc-800/50 shadow-2xl relative z-10">
+                <div className="text-center mb-10">
+                    <div className="inline-block px-3 py-1 rounded-full bg-zinc-900 border border-zinc-800 text-[10px] font-black tracking-[0.2em] text-[#ccff00] mb-4 uppercase">
+                        Welcome Back
+                    </div>
+                    <h1 className="text-4xl font-black text-white italic tracking-tighter uppercase leading-none">ACE CONNECT</h1>
+                    <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest mt-3">Elite Matchmaking Hub</p>
                 </div>
 
                 {error && (
-                    <div className="bg-red-50 text-red-600 p-3 rounded-lg mb-4 text-sm">
+                    <div className="bg-red-500/10 border border-red-500/30 text-red-500 p-4 rounded-2xl mb-6 text-xs font-bold text-center">
                         {error}
                     </div>
                 )}
 
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} className="space-y-4">
                     <Input
-                        label="Email"
+                        label="Identity (Email)"
                         type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        placeholder="enter@email.com"
+                        placeholder="athlete@aceconnect.me"
                         required
                         autoComplete="email"
                     />
 
                     <Input
-                        label="Password"
+                        label="Access Key"
                         type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
@@ -79,16 +88,18 @@ export const Login = () => {
                         autoComplete="current-password"
                     />
 
-                    <Button type="submit" className="w-full mt-2" isLoading={loading}>
-                        Sign In
+                    <Button type="submit" variant="neon" className="w-full py-4 rounded-2xl font-black italic uppercase tracking-widest mt-4" isLoading={loading}>
+                        LOG IN NOW
                     </Button>
                 </form>
 
-                <div className="mt-6 text-center text-sm text-gray-600">
-                    Don't have an account?{' '}
-                    <Link to="/register" className="text-green-600 font-semibold hover:text-green-700">
-                        Sign up
-                    </Link>
+                <div className="mt-10 text-center">
+                    <p className="text-zinc-600 text-[10px] font-bold uppercase tracking-widest">
+                        New to the circuit?{' '}
+                        <Link to="/register" className="text-[#ccff00] hover:text-[#a3e635] transition-colors ml-1 underline decoration-2 underline-offset-4">
+                            CREATE PRO ACCOUNT
+                        </Link>
+                    </p>
                 </div>
             </div>
         </div>

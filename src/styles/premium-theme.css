@@ -1,0 +1,49 @@
+:root {
+    --bg-primary: #09090b;
+    /* Zinc 950 */
+    --bg-secondary: #18181b;
+    /* Zinc 900 */
+    --accent-primary: #ccff00;
+    /* Electric Lime */
+    --accent-secondary: #a3e635;
+    /* Lime 400 */
+    --text-primary: #fafafa;
+    /* Zinc 50 */
+    --text-secondary: #a1a1aa;
+    /* Zinc 400 */
+    --border-primary: #27272a;
+    /* Zinc 800 */
+    --neon-glow: 0 0 15px rgba(204, 255, 0, 0.3);
+    --glass-bg: rgba(24, 24, 27, 0.7);
+    --glass-border: rgba(255, 255, 255, 0.05);
+}
+
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: 'Inter', sans-serif;
+}
+
+.glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--glass-border);
+}
+
+.neon-border {
+    border: 1px solid var(--accent-primary);
+    box-shadow: var(--neon-glow);
+}
+
+.text-neon {
+    color: var(--accent-primary);
+    text-shadow: 0 0 10px rgba(204, 255, 0, 0.5);
+}
+
+.bg-zinc-900 {
+    background-color: var(--bg-secondary);
+}
+
+.border-zinc-800 {
+    border-color: var(--border-primary);
+}
