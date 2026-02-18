@@ -30,6 +30,7 @@ export const FindMatch = () => {
     const [invitations, setInvitations] = useState<Invitation[]>([]);
     const [loading, setLoading] = useState(true);
     const [sendingInvite, setSendingInvite] = useState<number | null>(null);
+    const [sentInvitations, setSentInvitations] = useState<number[]>([]);
 
     useEffect(() => {
         fetchData();
@@ -62,9 +63,14 @@ export const FindMatch = () => {
                 matchRequestId: requestId,
                 message: "Hey! I'd like to play."
             });
-            alert('Invitation sent!');
+            setSentInvitations(prev => [...prev, requestId]);
+            // alert('Invitation sent!'); // User says this disappears too fast, maybe they'd prefer a persistent state change
         } catch (err: any) {
-            alert(err.response?.data?.error || 'Failed to send invitation');
+            const errorMsg = err.response?.data?.error || 'Failed to send invitation';
+            if (errorMsg === 'Invitation already sent') {
+                setSentInvitations(prev => [...prev, requestId]);
+            }
+            alert(errorMsg);
         } finally {
             setSendingInvite(null);
         }
@@ -163,9 +169,9 @@ export const FindMatch = () => {
                                             className="w-full text-sm"
                                             onClick={() => handleSendInvite(req.id)}
                                             isLoading={sendingInvite === req.id}
-                                            disabled={req.user_id === user?.id}
+                                            disabled={req.user_id === user?.id || sentInvitations.includes(req.id)}
                                         >
-                                            {req.user_id === user?.id ? 'Your Request' : 'Send Invite'}
+                                            {req.user_id === user?.id ? 'Your Request' : (sentInvitations.includes(req.id) ? 'Invitation Sent' : 'Send Invite')}
                                         </Button>
                                     </div>
                                 ))}
@@ -178,6 +184,7 @@ export const FindMatch = () => {
                         <MapView
                             requests={requests}
                             onRequestClick={(req) => handleSendInvite(req.id)}
+                            sentInvitations={sentInvitations}
                         />
                     )}
 

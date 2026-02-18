@@ -5,6 +5,7 @@ import type { MatchRequest } from '../types';
 interface MapViewProps {
     requests: MatchRequest[];
     onRequestClick?: (request: MatchRequest) => void;
+    sentInvitations?: number[];
 }
 
 const containerStyle = {
@@ -17,7 +18,7 @@ const defaultCenter = {
     lng: -122.4194
 };
 
-export const MapView = ({ requests, onRequestClick }: MapViewProps) => {
+export const MapView = ({ requests, onRequestClick, sentInvitations = [] }: MapViewProps) => {
     const [selectedRequest, setSelectedRequest] = useState<MatchRequest | null>(null);
     const [userLocation, setUserLocation] = useState(defaultCenter);
 
@@ -157,9 +158,10 @@ export const MapView = ({ requests, onRequestClick }: MapViewProps) => {
                             {onRequestClick && (
                                 <button
                                     onClick={() => onRequestClick(selectedRequest)}
-                                    className="text-xs bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700 transition-colors"
+                                    disabled={sentInvitations.includes(selectedRequest.id)}
+                                    className={`text-xs px-3 py-1 rounded transition-colors ${sentInvitations.includes(selectedRequest.id) ? 'bg-gray-400 text-white cursor-not-allowed' : 'bg-green-600 text-white hover:bg-green-700'}`}
                                 >
-                                    Send Invite
+                                    {sentInvitations.includes(selectedRequest.id) ? 'Invitation Sent' : 'Send Invite'}
                                 </button>
                             )}
                         </div>
