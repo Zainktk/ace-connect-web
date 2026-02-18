@@ -20,10 +20,12 @@ export const Dashboard = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
     const [upcomingMatches, setUpcomingMatches] = useState<Match[]>([]);
+    const [announcement, setAnnouncement] = useState<{ title: string; message: string; icon: string } | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         fetchDashboardData();
+        fetchAnnouncement();
     }, []);
 
     const fetchDashboardData = async () => {
@@ -35,6 +37,15 @@ export const Dashboard = () => {
             console.error('Dashboard fetch error:', error);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const fetchAnnouncement = async () => {
+        try {
+            const res = await api.get('/announcements/active');
+            setAnnouncement(res.data);
+        } catch (error) {
+            console.error('Failed to fetch announcement:', error);
         }
     };
 
@@ -81,11 +92,13 @@ export const Dashboard = () => {
             </div>
 
             {/* Announcement Banner */}
-            <AnnouncementBanner
-                title="RAMADAN BLESSED MONTH"
-                message="Wishing you peace and joy this holy month. Check out local evening matches!"
-                icon="🌙"
-            />
+            {announcement && (
+                <AnnouncementBanner
+                    title={announcement.title}
+                    message={announcement.message}
+                    icon={announcement.icon}
+                />
+            )}
 
             {/* Upcoming Matches Section */}
             <div>
