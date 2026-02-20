@@ -61,6 +61,7 @@ export interface MatchRequest {
     user_location?: string;
     distance?: number;
     compatibility_score?: number;
+    invitation_sent?: boolean;
 }
 
 export interface Event {

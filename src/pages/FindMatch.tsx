@@ -42,6 +42,11 @@ export const FindMatch = () => {
             if (activeTab === 'list' || activeTab === 'map') {
                 const response = await api.get('/matchmaking/requests');
                 setRequests(response.data);
+                // Pre-populate sent invitations if already in DB
+                const sentIds = response.data
+                    .filter((r: any) => r.invitation_sent)
+                    .map((r: any) => r.id);
+                setSentInvitations(sentIds);
             } else if (activeTab === 'my_requests') {
                 const response = await api.get('/matchmaking/requests/my');
                 setMyRequests(response.data);
