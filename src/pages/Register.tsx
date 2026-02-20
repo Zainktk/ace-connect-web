@@ -215,7 +215,15 @@ export const Register = () => {
                                 required
                             />
 
-                            <div className="pt-4 border-t border-zinc-900">
+                            <div className="pt-4 border-t border-zinc-900 space-y-4">
+                                <Input
+                                    label="Location Name"
+                                    name="location"
+                                    value={formData.location}
+                                    onChange={handleChange}
+                                    placeholder="City, State"
+                                    required
+                                />
                                 <MapPicker
                                     onLocationSelect={(lat, lng, addr) => {
                                         setFormData(prev => ({
@@ -225,6 +233,7 @@ export const Register = () => {
                                             location: addr
                                         }));
                                     }}
+                                    address={formData.location}
                                 />
                                 {!formData.latitude && (
                                     <p className="text-[10px] text-red-500 font-bold mt-2 uppercase text-center">
