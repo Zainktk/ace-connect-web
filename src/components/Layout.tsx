@@ -3,8 +3,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Button } from './Button';
 
+import { useConfig } from '../context/ConfigContext';
+
 export const Layout = ({ children }: { children: ReactNode }) => {
     const { user, logout } = useAuth();
+    const { config } = useConfig();
     const navigate = useNavigate();
 
     return (
@@ -13,7 +16,7 @@ export const Layout = ({ children }: { children: ReactNode }) => {
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="flex justify-between h-16">
                         <div className="flex items-center cursor-pointer flex-shrink-0 group" onClick={() => navigate('/dashboard')}>
-                            <span className="text-2xl font-black text-[#ccff00] transition-all group-hover:drop-shadow-[0_0_8px_rgba(204,255,0,0.5)]">ACE CONNECT</span>
+                            <span className="text-2xl font-black text-[#ccff00] transition-all group-hover:drop-shadow-[0_0_8px_rgba(204,255,0,0.5)]">{config.brand_name}</span>
                         </div>
 
                         {user ? (
@@ -51,7 +54,7 @@ export const Layout = ({ children }: { children: ReactNode }) => {
             <footer className="bg-[#09090b] border-t border-zinc-900 mt-auto">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                     <p className="text-center text-zinc-600 text-[10px] font-black uppercase tracking-[0.2em]">
-                        &copy; {new Date().getFullYear()} ACE CONNECT. STRIVE FOR EXCELLENCE.
+                        &copy; {new Date().getFullYear()} {config.brand_name}. {config.brand_slogan}.
                     </p>
                 </div>
             </footer>

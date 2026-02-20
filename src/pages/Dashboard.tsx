@@ -16,8 +16,11 @@ interface Match {
     status: string;
 }
 
+import { useConfig } from '../context/ConfigContext';
+
 export const Dashboard = () => {
     const { user } = useAuth();
+    const { config } = useConfig();
     const navigate = useNavigate();
     const [upcomingMatches, setUpcomingMatches] = useState<Match[]>([]);
     const [announcement, setAnnouncement] = useState<{ title: string; message: string; icon: string } | null>(null);
@@ -74,7 +77,7 @@ export const Dashboard = () => {
                             <h1 className="text-2xl font-black text-white tracking-tight">{user?.name || 'ACE PLAYER'}</h1>
                             <span className="text-[#ccff00] text-xs">●</span>
                         </div>
-                        <p className="text-zinc-500 text-xs font-medium uppercase tracking-widest">{user?.location || 'San Francisco, CA'}</p>
+                        <p className="text-zinc-500 text-xs font-medium uppercase tracking-widest">{user?.location || config.default_location}</p>
                     </div>
 
                     <div className="flex items-center gap-3">
@@ -105,7 +108,7 @@ export const Dashboard = () => {
                 <div className="flex items-center justify-between mb-4 px-2">
                     <div className="flex items-center gap-2">
                         <div className="h-2 w-2 rounded-full bg-[#ccff00] animate-pulse" />
-                        <h2 className="text-sm font-black text-white uppercase tracking-widest">COURT COMMAND</h2>
+                        <h2 className="text-sm font-black text-white uppercase tracking-widest">{config.dashboard_match_header}</h2>
                     </div>
                 </div>
 
@@ -113,7 +116,7 @@ export const Dashboard = () => {
                     <div className="h-32 bg-zinc-900/50 rounded-3xl animate-pulse border border-zinc-800" />
                 ) : upcomingMatches.length === 0 ? (
                     <div className="bg-zinc-900/40 rounded-3xl border border-zinc-800/50 p-10 text-center glass">
-                        <p className="text-zinc-500 text-sm mb-4">No active sessions matching your form.</p>
+                        <p className="text-zinc-500 text-sm mb-4">{config.no_sessions_message}</p>
                         <Button variant="outline" size="sm" onClick={() => navigate('/find-match')}>Find Session</Button>
                     </div>
                 ) : (
@@ -122,7 +125,7 @@ export const Dashboard = () => {
                             <div key={match.id} className="p-5 flex items-center justify-between glass rounded-3xl border border-zinc-800/50 hover:bg-zinc-800/20 transition-all group">
                                 <div className="flex items-center gap-5">
                                     <div className="h-12 w-12 bg-zinc-950 border border-zinc-800 rounded-2xl flex items-center justify-center text-xl shadow-inner group-hover:border-[#ccff00]/30 transition-colors">
-                                        🎾
+                                        {config.primary_sport_icon}
                                     </div>
                                     <div>
                                         <h3 className="font-bold text-white text-md">vs {match.opponent_name}</h3>
@@ -144,9 +147,9 @@ export const Dashboard = () => {
                     onClick={() => navigate('/find-match')}
                     className="group relative h-28 glass border border-zinc-800 rounded-3xl p-5 cursor-pointer hover:border-[#ccff00]/50 transition-all overflow-hidden"
                 >
-                    <div className="absolute -right-2 -bottom-2 text-4xl opacity-10 group-hover:opacity-20 transition-opacity">🎾</div>
+                    <div className="absolute -right-2 -bottom-2 text-4xl opacity-10 group-hover:opacity-20 transition-opacity">{config.primary_sport_icon}</div>
                     <p className="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-1">Live Action</p>
-                    <h4 className="text-zinc-50 font-black text-lg tracking-tight">FIND MATCH</h4>
+                    <h4 className="text-zinc-50 font-black text-lg tracking-tight">{config.dashboard_find_match_title}</h4>
                 </div>
 
                 <div
@@ -155,7 +158,7 @@ export const Dashboard = () => {
                 >
                     <div className="absolute -right-2 -bottom-2 text-4xl opacity-10 group-hover:opacity-20 transition-opacity">🏆</div>
                     <p className="text-zinc-500 text-[10px] font-black uppercase tracking-widest mb-1">Local Tournaments</p>
-                    <h4 className="text-zinc-50 font-black text-lg tracking-tight">BROWSE EVENTS</h4>
+                    <h4 className="text-zinc-50 font-black text-lg tracking-tight">{config.dashboard_browse_events_title}</h4>
                 </div>
             </div>
         </div>

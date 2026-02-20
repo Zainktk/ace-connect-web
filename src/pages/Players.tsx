@@ -5,7 +5,10 @@ import { Input } from '../components/Input';
 import { LevelBadge } from '../components/LevelBadge';
 import type { User } from '../types';
 
+import { useConfig } from '../context/ConfigContext';
+
 export const Players = () => {
+    const { config } = useConfig();
     const [players, setPlayers] = useState<User[]>([]);
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
@@ -34,7 +37,7 @@ export const Players = () => {
         <div className="max-w-6xl mx-auto space-y-8">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 px-2">
                 <div>
-                    <h1 className="text-3xl font-black text-white italic tracking-tighter uppercase">PRO LIST</h1>
+                    <h1 className="text-3xl font-black text-white italic tracking-tighter uppercase">{config.pro_list_title}</h1>
                     <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest mt-1">Connect with the elite community</p>
                 </div>
                 <div className="w-full md:w-80">

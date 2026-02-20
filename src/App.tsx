@@ -150,13 +150,17 @@ const AppRoutes = () => {
   );
 };
 
+import { ConfigProvider } from './context/ConfigContext';
+
 function App() {
   return (
-    <AuthProvider>
-      <Router>
-        <AppRoutes />
-      </Router>
-    </AuthProvider>
+    <ConfigProvider>
+      <AuthProvider>
+        <Router>
+          <AppRoutes />
+        </Router>
+      </AuthProvider>
+    </ConfigProvider>
   );
 }
 
