@@ -94,21 +94,26 @@ export const MapPicker: React.FC<MapPickerProps> = ({ onLocationSelect, initialL
                 setLastGeocodedAddress(addr);
                 onLocationSelect(lat, lng, addr);
             } else {
-                // Try to find a broader area if specific address fails
-                const areaResult = response.results.find(r =>
-                    r.types.includes('locality') ||
-                    r.types.includes('administrative_area_level_1') ||
-                    r.types.includes('country')
-                );
+                // Strictly prioritize area names
+                const priorities = ['locality', 'sublocality', 'neighborhood', 'administrative_area_level_2', 'administrative_area_level_1', 'country'];
+                let bestMatch = '';
 
-                const fallbackAddr = areaResult ? areaResult.formatted_address : 'Selected Spot';
-                setAddress(fallbackAddr);
-                onLocationSelect(lat, lng, fallbackAddr);
+                for (const type of priorities) {
+                    const found = response.results.find(r => r.types.includes(type));
+                    if (found) {
+                        bestMatch = found.formatted_address;
+                        break;
+                    }
+                }
+
+                const fallback = bestMatch || (response.results.length > 0 ? response.results[response.results.length - 1].formatted_address : 'Unknown Area');
+                setAddress(fallback);
+                onLocationSelect(lat, lng, fallback);
             }
         } catch (error) {
             console.error('Geocoding error:', error);
-            setAddress('Selected Spot');
-            onLocationSelect(lat, lng, 'Selected Spot');
+            setAddress('Unknown Area');
+            onLocationSelect(lat, lng, 'Unknown Area');
         }
     };
 
