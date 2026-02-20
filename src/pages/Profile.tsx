@@ -203,6 +203,7 @@ export const Profile = () => {
                                             lat: formData.latitude,
                                             lng: formData.longitude
                                         } : undefined}
+                                        address={formData.location}
                                     />
                                 </div>
                             </div>

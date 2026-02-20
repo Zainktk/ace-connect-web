@@ -4,6 +4,7 @@ import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
 interface MapPickerProps {
     onLocationSelect: (lat: number, lng: number, address: string) => void;
     initialLocation?: { lat: number; lng: number };
+    address?: string;
 }
 
 const containerStyle = {
@@ -17,11 +18,12 @@ const defaultCenter = {
     lng: -122.4194
 };
 
-export const MapPicker: React.FC<MapPickerProps> = ({ onLocationSelect, initialLocation }) => {
+export const MapPicker: React.FC<MapPickerProps> = ({ onLocationSelect, initialLocation, address: addressProp }) => {
     const [center, setCenter] = useState(initialLocation || defaultCenter);
     const [marker, setMarker] = useState(initialLocation || null);
-    const [address, setAddress] = useState('');
+    const [address, setAddress] = useState(addressProp || '');
     const [loading, setLoading] = useState(false);
+    const [lastGeocodedAddress, setLastGeocodedAddress] = useState('');
 
     const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
@@ -29,6 +31,30 @@ export const MapPicker: React.FC<MapPickerProps> = ({ onLocationSelect, initialL
         googleMapsApiKey: apiKey || '',
         libraries: ['places']
     });
+
+    // Geocode address when it changes from parent (manual typing)
+    React.useEffect(() => {
+        if (!isLoaded || !addressProp || addressProp === lastGeocodedAddress) return;
+
+        const timer = setTimeout(async () => {
+            const geocoder = new google.maps.Geocoder();
+            try {
+                const response = await geocoder.geocode({ address: addressProp });
+                if (response.results[0]) {
+                    const { lat, lng } = response.results[0].geometry.location;
+                    const newPos = { lat: lat(), lng: lng() };
+                    setCenter(newPos);
+                    setMarker(newPos);
+                    setLastGeocodedAddress(addressProp);
+                    setAddress(addressProp);
+                }
+            } catch (error) {
+                console.error('Geocoding error:', error);
+            }
+        }, 1000); // 1s debounce
+
+        return () => clearTimeout(timer);
+    }, [addressProp, isLoaded, lastGeocodedAddress]);
 
     const detectLocation = () => {
         if (!navigator.geolocation) {
@@ -65,6 +91,7 @@ export const MapPicker: React.FC<MapPickerProps> = ({ onLocationSelect, initialL
             if (response.results[0]) {
                 const addr = response.results[0].formatted_address;
                 setAddress(addr);
+                setLastGeocodedAddress(addr);
                 onLocationSelect(lat, lng, addr);
             } else {
                 const fallbackAddr = `Location (${lat.toFixed(4)}, ${lng.toFixed(4)})`;
