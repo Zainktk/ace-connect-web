@@ -5,6 +5,7 @@ import { Button } from '../components/Button';
 import { Input } from '../components/Input';
 import { XPProgress } from '../components/XPProgress';
 import { LevelBadge } from '../components/LevelBadge';
+import { MapPicker } from '../components/MapPicker';
 
 export const Profile = () => {
     const { user, updateUser } = useAuth();
@@ -17,6 +18,8 @@ export const Profile = () => {
         name: '',
         bio: '',
         location: '',
+        latitude: null as number | null,
+        longitude: null as number | null,
         ntrpRating: '',
         photoUrl: ''
     });
@@ -27,6 +30,8 @@ export const Profile = () => {
                 name: user.name || '',
                 bio: user.bio || '',
                 location: user.location || '',
+                latitude: user.latitude || null,
+                longitude: user.longitude || null,
                 ntrpRating: user.ntrpRating?.toString() || '',
                 photoUrl: user.photoUrl || ''
             });
@@ -47,6 +52,8 @@ export const Profile = () => {
             name: formData.name,
             bio: formData.bio,
             location: formData.location,
+            latitude: formData.latitude,
+            longitude: formData.longitude,
         };
 
         const rating = parseFloat(formData.ntrpRating);
@@ -173,7 +180,32 @@ export const Profile = () => {
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <Input label="Location" name="location" value={formData.location} onChange={handleChange} placeholder="City, State" />
+                            <div className="space-y-4">
+                                <Input
+                                    label="Location Name"
+                                    name="location"
+                                    value={formData.location}
+                                    onChange={handleChange}
+                                    placeholder="City, State"
+                                    required
+                                />
+                                <div className="h-64 rounded-2xl overflow-hidden border border-zinc-800">
+                                    <MapPicker
+                                        onLocationSelect={(lat, lng, addr) => {
+                                            setFormData(prev => ({
+                                                ...prev,
+                                                latitude: lat,
+                                                longitude: lng,
+                                                location: addr
+                                            }));
+                                        }}
+                                        initialLocation={formData.latitude && formData.longitude ? {
+                                            lat: formData.latitude,
+                                            lng: formData.longitude
+                                        } : undefined}
+                                    />
+                                </div>
+                            </div>
                             <Input label="Photo URL" name="photoUrl" value={formData.photoUrl} onChange={handleChange} placeholder="https://..." />
                         </div>
 
