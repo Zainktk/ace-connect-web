@@ -94,15 +94,21 @@ export const MapPicker: React.FC<MapPickerProps> = ({ onLocationSelect, initialL
                 setLastGeocodedAddress(addr);
                 onLocationSelect(lat, lng, addr);
             } else {
-                const fallbackAddr = `Location (${lat.toFixed(4)}, ${lng.toFixed(4)})`;
+                // Try to find a broader area if specific address fails
+                const areaResult = response.results.find(r =>
+                    r.types.includes('locality') ||
+                    r.types.includes('administrative_area_level_1') ||
+                    r.types.includes('country')
+                );
+
+                const fallbackAddr = areaResult ? areaResult.formatted_address : 'Selected Spot';
                 setAddress(fallbackAddr);
                 onLocationSelect(lat, lng, fallbackAddr);
             }
         } catch (error) {
             console.error('Geocoding error:', error);
-            const fallbackAddr = `Location (${lat.toFixed(4)}, ${lng.toFixed(4)})`;
-            setAddress(fallbackAddr);
-            onLocationSelect(lat, lng, fallbackAddr);
+            setAddress('Selected Spot');
+            onLocationSelect(lat, lng, 'Selected Spot');
         }
     };
 
