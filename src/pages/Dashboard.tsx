@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { XPProgress } from '../components/XPProgress';
 import { LevelBadge } from '../components/LevelBadge';
 import { AnnouncementBanner } from '../components/AnnouncementBanner';
+import { GamificationInfo } from '../components/GamificationInfo';
 
 interface Match {
     id: number;
@@ -25,6 +26,7 @@ export const Dashboard = () => {
     const [upcomingMatches, setUpcomingMatches] = useState<Match[]>([]);
     const [announcement, setAnnouncement] = useState<{ title: string; message: string; icon: string } | null>(null);
     const [loading, setLoading] = useState(true);
+    const [isInfoOpen, setIsInfoOpen] = useState(false);
 
     useEffect(() => {
         fetchDashboardData();
@@ -54,6 +56,8 @@ export const Dashboard = () => {
 
     return (
         <div className="space-y-8 max-w-2xl mx-auto">
+            <GamificationInfo isOpen={isInfoOpen} onClose={() => setIsInfoOpen(false)} />
+
             {/* Player Profile Header */}
             <div className="relative p-6 rounded-[2rem] bg-zinc-900 border border-zinc-800 overflow-hidden">
                 <div className="absolute top-0 right-0 -mr-12 -mt-12 h-40 w-40 rounded-full bg-[#ccff00]/5 blur-3xl" />
@@ -82,7 +86,10 @@ export const Dashboard = () => {
 
                     <div className="flex items-center gap-3">
                         <div className="bg-zinc-950 p-3 rounded-2xl border border-zinc-800 text-center min-w-[80px]">
-                            <p className="text-[10px] text-zinc-500 font-black uppercase tracking-widest">Streak</p>
+                            <p className="text-[10px] text-zinc-500 font-black uppercase tracking-widest flex items-center justify-center gap-1">
+                                Streak
+                                <span className="cursor-help opacity-50 hover:opacity-100 transition-opacity" onClick={() => setIsInfoOpen(true)}>ℹ️</span>
+                            </p>
                             <p className="text-white font-black text-lg italic">{user?.streak || 0} 🔥</p>
                         </div>
                         <Button variant="neon" size="sm" onClick={() => navigate('/profile')} className="rounded-xl">Edit</Button>

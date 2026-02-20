@@ -5,6 +5,7 @@ import api from '../services/api';
 import { Button } from '../components/Button';
 import { Input } from '../components/Input';
 import { Select } from '../components/Select';
+import { MapPicker } from '../components/MapPicker';
 
 export const Register = () => {
     const [loading, setLoading] = useState(false);
@@ -20,6 +21,9 @@ export const Register = () => {
         skillLevel: '3.5', // Default intermediate
         yearsExperience: '1',
         bio: '',
+        location: '',
+        latitude: 0,
+        longitude: 0,
         termsAccepted: false
     });
 
@@ -41,8 +45,11 @@ export const Register = () => {
                 email: formData.email,
                 password: formData.password,
                 role: formData.role,
-                name: formData.name, // Required by backend
-                ntrpRating: parseFloat(formData.skillLevel) // Backend expects float
+                name: formData.name,
+                ntrpRating: parseFloat(formData.skillLevel),
+                location: formData.location,
+                latitude: formData.latitude,
+                longitude: formData.longitude
             });
 
             const { user, token } = registerRes.data;
@@ -207,6 +214,24 @@ export const Register = () => {
                                 min="0"
                                 required
                             />
+
+                            <div className="pt-4 border-t border-zinc-900">
+                                <MapPicker
+                                    onLocationSelect={(lat, lng, addr) => {
+                                        setFormData(prev => ({
+                                            ...prev,
+                                            latitude: lat,
+                                            longitude: lng,
+                                            location: addr
+                                        }));
+                                    }}
+                                />
+                                {!formData.latitude && (
+                                    <p className="text-[10px] text-red-500 font-bold mt-2 uppercase text-center">
+                                        Please set your "Home Base" on the map to continue
+                                    </p>
+                                )}
+                            </div>
                         </div>
                     )}
 
@@ -218,7 +243,13 @@ export const Register = () => {
                         </div>
                     )}
 
-                    <Button type="submit" variant="neon" className="w-full py-4 rounded-2xl font-black italic uppercase tracking-widest" isLoading={loading}>
+                    <Button
+                        type="submit"
+                        variant="neon"
+                        className="w-full py-4 rounded-2xl font-black italic uppercase tracking-widest"
+                        isLoading={loading}
+                        disabled={formData.role === 'player' && (!formData.latitude || !formData.longitude)}
+                    >
                         FINALIZE DRAFT
                     </Button>
                 </form>
